@@ -14,14 +14,16 @@ function preload()
 function setup() {
 	createCanvas(800, 700);
 	rectMode(CENTER);
+
+	
+	packageSprite=createSprite(width/2, 80, 10,10);
+	packageSprite.addImage(packageIMG)
+	packageSprite.scale=0.2
 	
 	helicopterSprite=createSprite(width/2, 200, 10,10);
 	helicopterSprite.addImage(helicopterIMG)
 	helicopterSprite.scale=0.6
 
-	packageSprite=createSprite(width/2, 80, 10,10);
-	packageSprite.addImage(packageIMG)
-	packageSprite.scale=0.2
 
 
 
@@ -74,24 +76,36 @@ function setup() {
 function draw() {
   rectMode(CENTER);
   background(0);
- 
-  packageSprite.x= packageBody.position.x 
-  packageSprite.y= packageBody.position.y 
-
+	
+ 	packageSprite.x= packageBody.position.x 
+ 	 packageSprite.y= packageBody.position.y 
   
-helicopterSprite.depth=packageSprite.depth+1;
+	helicopterSprite.depth=packageSprite.depth+1;
 
-keyPressed();
-
-  drawSprites();
-  
-  function keyPressed() {
-	if (keyCode === DOWN_ARROW) {
-	   Body.setStatic(packageBody, false);
-	 }
-   }
-
-
-
- 
+	if(packageSprite.isTouching(boxleftSprite)){
+		packageSprite.x=width/2;
+		packageSprite.y=610;
+	}
+  	drawSprites();
 }
+function keyPressed() {
+	if (keyCode === RIGHT_ARROW) {
+		helicopterSprite.x=helicopterSprite.x+20;
+		translation={
+			x:20,
+			y:0
+		}
+		Matter.Body.translate(packageBody,translation);
+	 }
+	 else if(keyCode === LEFT_ARROW) {
+		helicopterSprite.x=helicopterSprite.x-20;
+		translation={
+			x:-20,
+			y:0
+		}
+		Matter.Body.translate(packageBody,translation);
+	  }
+	  else if (keyCode === DOWN_ARROW) {
+		Matter.Body.setStatic(packageBody, false);
+	  }
+   }
